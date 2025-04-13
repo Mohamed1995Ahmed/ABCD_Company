@@ -1,0 +1,37 @@
+﻿@model Department
+
+<h2>department Details</h2>
+
+<div class="department-card">
+    <p><strong>ID:</strong> @Model.Id</p>
+    <p><strong>Name:</strong> @Model.Name</p>
+    <p><strong>ManagerName:</strong> @Model.ManagerName</p>
+</div>
+
+<a href="@Url.Action("index", "department")">Back to List</a>
+
+<style>
+    .department-card {
+        border: 1px solid #ccc;
+        padding: 20px;
+        width: 300px;
+        font-family: Arial, sans-serif;
+        box-shadow: 0 0 8px rgba(0,0,0,0.1);
+        border-radius: 10px;
+        margin: 20px auto;
+        text-align: center;
+    }
+
+        .department-card img {
+            width: 150px;
+            height: auto;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+    h2 {
+        text-align: center;
+        color: #007acc;
+    }
+</style>
+

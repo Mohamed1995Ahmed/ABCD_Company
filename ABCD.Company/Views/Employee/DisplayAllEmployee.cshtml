@@ -1,0 +1,99 @@
+﻿@model List<Employee>
+
+<h2 class="employee-title">Employee List</h2>
+
+<table class="employee-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Job Title</th>
+            <th>Salary</th>
+            <th>Department</th>
+            <th>Image</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>@item.JobTitle</td>
+                <td>@item.Salary</td>
+                <td>@item.Department?.Name</td>
+                <td>
+                    <img src="~/@item.ImageURL" alt="@item.Name" class="employee-img" />
+                </td>
+                <td>
+                    <form method="get" action="@Url.Action("GetEmployeeById", "Employee", new { id = item.Id })">
+                        <button type="submit" class="btn-details">View Details</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<style>
+    .employee-title {
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 28px;
+        font-weight: bold;
+        color: #007acc;
+    }
+
+    .employee-table {
+        width: 95%;
+        margin: 20px auto;
+        border-collapse: collapse;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+    }
+
+        .employee-table th, .employee-table td {
+            padding: 14px 20px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .employee-table th {
+            background-color: #007acc;
+            color: white;
+            font-size: 16px;
+        }
+
+        .employee-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .employee-table tr:hover {
+            background-color: #e0f2ff;
+        }
+
+    .btn-details {
+        background-color: #007acc;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 14px;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-details:hover {
+            background-color: #005fa3;
+        }
+
+    .employee-img {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+</style>

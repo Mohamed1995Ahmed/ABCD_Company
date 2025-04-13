@@ -1,0 +1,87 @@
+﻿@model List<Department>
+
+<h2 class="department-title">Department List</h2>
+
+<table class="department-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Manager</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>@item.ManagerName</td>
+                <td>
+                    <form method="get" action="@Url.Action("GetDepartmentById", "department", new { id = item.Id })">
+                        <button type="submit" class="btn-details">View Details</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<style>
+    .department-title {
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 28px;
+        font-weight: bold;
+        color: #007acc;
+    }
+
+    .department-table {
+        width: 90%;
+        margin: 20px auto;
+        border-collapse: collapse;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        background-color: #fff;
+        overflow-x: auto;
+    }
+
+        .department-table th, .department-table td {
+            padding: 14px 20px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .department-table th {
+            background-color: #007acc;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .department-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .department-table tr:hover {
+            background-color: #e0f2ff;
+        }
+
+    .btn-details {
+        background-color: #007acc;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 14px;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-details:hover {
+            background-color: #005fa3;
+        }
+
+</style>
