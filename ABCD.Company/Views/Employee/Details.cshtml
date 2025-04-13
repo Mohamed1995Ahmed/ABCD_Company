@@ -1,0 +1,79 @@
+﻿@model Employee
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Employee Details</h2>
+
+<div class="employee-card">
+    <img src="~/@Model.ImageURL" alt="@Model.Name" />
+    <p><strong>ID:</strong> @Model.Id</p>
+    <p><strong>Name:</strong> @Model.Name</p>
+    <p><strong></strong> @ViewData["Message"]</p>
+    <p><strong>Temparture:</strong> @ViewData["Temp"]</p>
+    @if (ViewData["Branches"] != null)
+    {
+        <select class="form form-control">
+            @foreach (var item in (List<string>)ViewData["Branches"])
+            {
+                <option>@item</option>
+            }
+        </select>
+    }
+    else
+    {
+        <p style="color:red;">Branches list is not available.</p>
+    }
+    <select class="form form-control">
+        @foreach (var item in ViewBag.Branches)
+        {
+            <option>@item</option>
+        }
+    </select>
+
+    
+
+  
+</div>
+
+<div style="text-align: center;">
+    <a href="@Url.Action("Index", "Employee")" class="back-link">⬅ Back to List</a>
+</div>
+
+<style>
+    .employee-card {
+        border: 1px solid #ccc;
+        padding: 15px;
+        width: 350px;
+        font-family: Arial, sans-serif;
+        box-shadow: 0 0 8px rgba(0,0,0,0.1);
+        border-radius: 10px;
+        margin: 20px auto;
+        text-align: center;
+        background-color: #fdfdfd;
+    }
+
+        .employee-card img {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            box-shadow: 0 0 6px rgba(0,0,0,0.2);
+        }
+
+        .employee-card p {
+            margin: 6px 0;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+    select.form.form-control {
+        margin-top: 10px;
+        padding: 6px;
+        font-size: 14px;
+    }
+
+
+</style>
+

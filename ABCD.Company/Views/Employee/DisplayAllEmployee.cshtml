@@ -1,4 +1,10 @@
 ﻿@model List<Employee>
+<form asp-action="Search1" asp-controller="Employee" method="get" class="mb-3">
+    <input type="text" name="keyword" value="@ViewBag.Keyword" placeholder="Search by name or job title" class="form-control" style="width: 300px; display: inline-block;" />
+    <button type="submit" class="btn btn-success">Search</button>
+</form>
+
+
 
 <h2 class="employee-title">Employee List</h2>
 
@@ -10,8 +16,12 @@
             <th>Job Title</th>
             <th>Salary</th>
             <th>Department</th>
+            <th>DId</th>
             <th>Image</th>
-            <th>Action</th>
+            <th>Details</th>
+            <th>Add</th>
+            <th>Update</th>
+            <th>Delete</th>
         </tr>
     </thead>
     <tbody>
@@ -23,15 +33,27 @@
                 <td>@item.JobTitle</td>
                 <td>@item.Salary</td>
                 <td>@item.Department?.Name</td>
+                <td>@item.DepartmentId</td>
+
                 <td>
                     <img src="~/@item.ImageURL" alt="@item.Name" class="employee-img" />
                 </td>
                 <td>
                     <form method="get" action="@Url.Action("GetEmployeeById", "Employee", new { id = item.Id })">
-                        <button type="submit" class="btn-details">View Details</button>
+                        <button type="submit" class="btn-details">Details</button>
                     </form>
+                  
+                   
+
                 </td>
+                <td> <a href="/employee/add" class="btn-details">add</a></td>
+
+                <td> <a href="/employee/edit/@item.Id" class="btn-details">Edit</a></td>
+                <td> <a href="/employee/delete/@item.Id" class="btn-details">Delete</a></td>
+
             </tr>
+
+
         }
     </tbody>
 </table>

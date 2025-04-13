@@ -1,0 +1,78 @@
+﻿@model EmpDepartmentList
+<form action="/employee/saveEdit/@Model.Id" method="post" class="form-control form">
+	<label>Name</label>
+	<input type="text" value="@Model?.Name" name="Name" id="Name"  class="form-control form" />
+	<label>Salary</label>
+	<input type="text" value="@Model?.Salary" name="Salary" id="Salary" class="form-control form" />
+	<label>JobTitle</label>
+	<input type="text" value="@Model?.JobTitle" name="JobTitle" id="JobTitle" class="form-control form" />
+	<label>ImageURL</label>
+	<input type="text" value="@Model?.ImageURL" name="ImageURL" id="ImageURL" class="form-control form" />
+
+	<label>Address</label>
+	<input type="text" value="@Model?.Address" name="Address" id="Address" class="form-control form" />
+	<label>DepartmentId</label>
+	@*<input type="text" value="@Model?.DepartmentId" name="DepartmentId" id="DepartmentId" class="form-control form" />*@
+	
+	<select type="text"  name="DepartmentId" id="DepartmentId" class="form-control form">
+    @foreach(var item in Model.Departments){
+		if(Model.DepartmentId==item.Id){
+				<option value="@item.Id" selected>@item.Name</option>
+
+		}
+		else{
+				<option value="@item.Id" >@item.Name</option>
+
+		}
+	}
+</select>
+	<input type="submit" name="submit" class="btn btn-info">
+
+</form>
+@* @model Employee *@
+
+@* <form asp-action="SaveEdit" asp-controller="Employee" method="post"> *@
+@*     <input type="hidden" asp-for="Id" /> *@
+
+@*     <div class="form-group"> *@
+@*         <label asp-for="Name"></label> *@
+@*         <input asp-for="Name" class="form-control" /> *@
+@*         <span asp-validation-for="Name" class="text-danger"></span> *@
+@*     </div> *@
+
+@*     <div class="form-group"> *@
+@*         <label asp-for="Salary"></label> *@
+@*         <input asp-for="Salary" class="form-control" /> *@
+@*         <span asp-validation-for="Salary" class="text-danger"></span> *@
+@*     </div> *@
+
+@*     <div class="form-group"> *@
+@*         <label asp-for="DepartmentId"></label> *@
+@*         <input asp-for="DepartmentId" class="form-control" /> *@
+@*         <span asp-validation-for="DepartmentId" class="text-danger"></span> *@
+@*     </div> *@
+
+@*     <div class="form-group"> *@
+@*         <label asp-for="JobTitle"></label> *@
+@*         <input asp-for="JobTitle" class="form-control" /> *@
+@*         <span asp-validation-for="JobTitle" class="text-danger"></span> *@
+@*     </div> *@
+
+@*     <!-- Optional fields --> *@
+@*     <div class="form-group"> *@
+@*         <label asp-for="Address"></label> *@
+@*         <input asp-for="Address" class="form-control" /> *@
+@*     </div> *@
+
+@*     <div class="form-group"> *@
+@*         <label asp-for="ImageURL"></label> *@
+@*         <input asp-for="ImageURL" class="form-control" /> *@
+@*     </div> *@
+
+@*     <button type="submit" class="btn btn-primary">Save</button> *@
+@* </form> *@
+
+@* @section Scripts { *@
+@*     <partial name="_ValidationScriptsPartial" /> *@
+@* } *@
+
