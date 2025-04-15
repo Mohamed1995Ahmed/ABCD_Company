@@ -25,6 +25,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="employee" asp-action="Index">Employee</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="department" asp-action="index">Department</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -41,9 +47,13 @@
             &copy; 2025 - ABCD.Company - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+    <!-- In the body of your layout, just before closing the </body> tag -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @* Render the Validation Scripts if needed for AJAX and Remote Validation *@
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>
