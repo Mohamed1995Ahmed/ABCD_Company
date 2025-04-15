@@ -1,0 +1,24 @@
+﻿@{
+    var successMessage = TempData["Success"];
+    var errorMessage = TempData["Error"];
+}
+
+@if (successMessage != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @successMessage
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (errorMessage != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @errorMessage
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<!-- Your department listing or other content goes here -->
+
+<a asp-action="Index" asp-controller="Department" class="btn btn-primary">Back to List</a>

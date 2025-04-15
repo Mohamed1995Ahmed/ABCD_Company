@@ -1,51 +1,69 @@
 ﻿@model EmpDepartmentList
+@{
+    SelectList listItems = new SelectList(Model.Departments, "Id", "Name");
+}
+
 
 <form method="post" asp-controller="employee" asp-action="SaveAdd" class="form-control form">
+      
+    <div asp-validation-summary="All" class="text-danger"></div>
     <div class="mb-3">
-        <label for="Name" class="form-label">Department Name</label>
-        <input name="Name" id="Name" value="@Model?.Name" type="text" class="form-control" />
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
-        <label for="Address" class="form-label">Address</label>
-        <input name="Address" id="Address" value="@Model?.Address" type="text" class="form-control" />
+        <label asp-for="Address" class="form-label"></label>
+        <input asp-for="Address" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+
     </div>
     <div class="mb-3">
         <label for="ImageURL" class="form-label">ImageURL</label>
-        <input name="ImageURL" id="ImageURL" value="@Model?.ImageURL" type="text" class="form-control" />
+        <input asp-for="ImageURL" class="form-control" />
+        <span asp-validation-for="ImageURL" class="text-danger"></span>
+
     </div>
     <div class="mb-3">
         <label for="Salary" class="form-label">Salary</label>
-        <input name="Salary" id="Salary" value="@Model?.Salary" type="text" class="form-control" />
+        <input asp-for="Salary" class="form-control" />
+        <span asp-validation-for="Salary" class="text-danger"></span>
+
     </div>
      <div class="mb-3">
         <label for="JobTitle" class="form-label">JobTitle</label>
-     <input name="JobTitle" id="JobTitle" value="@Model?.JobTitle" type="text" class="form-control" />
+     <input asp-for="JobTitle" class="form-control" />
+        <span asp-validation-for="JobTitle" class="text-danger"></span>
+
  </div>
-    <label>DepartmentId</label>
+    <label asp-for="DepartmentId"></label>
     @*<input type="text" value="@Model?.DepartmentId" name="DepartmentId" id="DepartmentId" class="form-control form" />*@
-
-    <select type="text" name="DepartmentId" id="DepartmentId" class="form-control form">
-        @foreach (var item in Model.Departments)
-        {
-            if (Model.DepartmentId == item.Id)
-            {
-                <option value="@item.Id" selected>@item.Name</option>
-
-            }
-            else
-            {
-                <option value="@item.Id">@item.Name</option>
-
-            }
-        }
+    @* type="text" name="DepartmentId" id="DepartmentId" *@
+    <select asp-for="DepartmentId" asp-items="listItems" class="form-control form">
+        <option value="0">SelectItem</option>
+       
     </select>
+    <span asp-validation-for="DepartmentId"></span>
+
 
 
     <div class="d-flex justify-content-between mt-4">
-        <a href="@Url.Action("Index", "Department")" class="btn btn-secondary">Back to List</a>
+        <a asp-action="index" asp-controller="employee" class="btn btn-secondary">Back to List</a>
         <input type="submit" value="Submit" class="btn btn-danger" />
     </div>
 
 </form>
+
+@section Scripts{
+    <!-- jQuery (Required for validation) -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <!-- jQuery Validation -->
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+
+    <!-- jQuery Unobtrusive Validation -->
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+}
 

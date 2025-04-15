@@ -1,4 +1,8 @@
 ﻿@model EmpDepartmentList
+@{
+	SelectList selectLists = new SelectList(Model.Departments, "Id", "Name");
+
+}
 <form action="/employee/saveEdit/@Model.Id" method="post" class="form-control form">
 	<label>Name</label>
 	<input type="text" value="@Model?.Name" name="Name" id="Name"  class="form-control form" />
@@ -14,21 +18,26 @@
 	<label>DepartmentId</label>
 	@*<input type="text" value="@Model?.DepartmentId" name="DepartmentId" id="DepartmentId" class="form-control form" />*@
 	
-	<select type="text"  name="DepartmentId" id="DepartmentId" class="form-control form">
-    @foreach(var item in Model.Departments){
-		if(Model.DepartmentId==item.Id){
-				<option value="@item.Id" selected>@item.Name</option>
-
-		}
-		else{
-				<option value="@item.Id" >@item.Name</option>
-
-		}
-	}
+	<select asp-for="DepartmentId" asp-items="selectLists" class="form-control form">
+		<option value="0">Select Department</option>
+   
 </select>
 	<input type="submit" name="submit" class="btn btn-info">
 
 </form>
+@* @foreach (var item in Model.Departments) *@
+@* { *@
+@* 	if (Model.DepartmentId == item.Id) *@
+@* 	{ *@
+@* 		<option value="@item.Id" selected>@item.Name</option> *@
+
+@* 	} *@
+@* 	else *@
+@* 	{ *@
+@* 		<option value="@item.Id">@item.Name</option> *@
+
+@* 	} *@
+@* } *@
 @* @model Employee *@
 
 @* <form asp-action="SaveEdit" asp-controller="Employee" method="post"> *@

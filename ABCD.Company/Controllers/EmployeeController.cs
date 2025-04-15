@@ -1,5 +1,7 @@
 ﻿using ABCD.Company.Data;
 using ABCD.Company.Models;
+using ABCD.Company.Repository;
+using ABCD.Company.Services;
 using ABCD.Company.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,25 +9,28 @@ namespace ABCD.Company.Controllers
 {
     public class EmployeeController : Controller
     {
-        public EmployeeController():base()
+        IEmployeeRepo employeeRepo;
+        IDepartmentRepo departmentRepo;
+        public EmployeeController(IEmployeeRepo _employeeRepo,IDepartmentRepo _departmentRepo):base()
         {
-            
+            employeeRepo = _employeeRepo;
+            departmentRepo = _departmentRepo;
         }
-        AppDBcontext context=new AppDBcontext();
+       // AppDBcontext context=new AppDBcontext();
         public IActionResult Index()
         {
-            var employee = context.Employees.ToList();
+            var employee = employeeRepo.GetAll(); //context.Employees.ToList();
             return View("DisplayAllEmployee", employee);
             
         }
         public IActionResult GetEmployeeById(int id)
         {
-            var employee = context.Employees.FirstOrDefault(x => x.Id == id);
+            var employee = employeeRepo.GetById(id); //context.Employees.FirstOrDefault(x => x.Id == id);
             return View("GetEmployeeById", employee);
         }
         public IActionResult Details(int id)
          {
-            var employee = context.Employees.FirstOrDefault(x => x.Id == id);
+            var employee = employeeRepo.GetById(id); //context.Employees.FirstOrDefault(x => x.Id == id);
             ViewData["Message"] = $"Hello {employee.Name}";
             ViewData["Temp"] = 35;
 
@@ -36,7 +41,7 @@ namespace ABCD.Company.Controllers
         }
         public IActionResult DetailsVM(int id)
         {
-            var employee = context.Employees.FirstOrDefault(x => x.Id == id);
+            var employee = employeeRepo.GetById(id); //context.Employees.FirstOrDefault(x => x.Id == id);
             List<string> Branches = new List<string> { "Cairo", "Aswan", "Sohag" };
             EmpDeptDetails empDeptDetails = new EmpDeptDetails();
             empDeptDetails.EmpName = employee.Name;
@@ -54,7 +59,7 @@ namespace ABCD.Company.Controllers
         }
         public IActionResult Edit(int id)
         {
-            var emp = context.Employees.FirstOrDefault(x => x.Id == id);
+            var emp = employeeRepo.GetById(id); //context.Employees.FirstOrDefault(x => x.Id == id);
 
             if (emp == null)
             {
@@ -70,7 +75,7 @@ namespace ABCD.Company.Controllers
                 ImageURL = emp.ImageURL,
                 Address = emp.Address,
                 DepartmentId = emp.DepartmentId,
-                Departments = context.Departments.ToList() // For dropdown
+                Departments = departmentRepo.GetAll().DistinctBy(x => x.Name).ToList()//context.Departments.ToList() // For dropdown
             };
 
             return View("Edit", empDepartmentList);
@@ -81,25 +86,25 @@ namespace ABCD.Company.Controllers
             
            if(EditEmployee.Name != null)
             {
-                var emp = context.Employees.FirstOrDefault(x => x.Id == id);
+                var emp = employeeRepo.GetById(id); //context.Employees.FirstOrDefault(x => x.Id == id);
                 emp.Name = EditEmployee.Name;
                 emp.Salary = EditEmployee.Salary;
                 emp.DepartmentId = EditEmployee.DepartmentId;
                 emp.Address = EditEmployee.Address;
                 emp.ImageURL = EditEmployee.ImageURL;
                 emp.JobTitle = EditEmployee.JobTitle;
-                context.Employees.Update(emp);
-                context.SaveChanges();
+                employeeRepo.Update(emp); //context.Employees.Update(emp);
+                employeeRepo.Save();    //context.SaveChanges();
                 return RedirectToAction("index");
             }
-           EditEmployee.Departments=context.Departments.ToList();
-           return View("edit",EditEmployee);
+            EditEmployee.Departments = departmentRepo.GetAll().DistinctBy(x => x.Name).ToList();//context.Departments.ToList();
+            return View("edit",EditEmployee);
         }
         public IActionResult Add()
         {
             var empDepartmentList = new EmpDepartmentList
             {
-                Departments = context.Departments.ToList()
+                Departments = departmentRepo.GetAll().DistinctBy(x=>x.Name).ToList() //context.Departments.ToList()
             };
 
             return View("Add", empDepartmentList);
@@ -107,35 +112,44 @@ namespace ABCD.Company.Controllers
 
 
         [HttpPost]
-        public IActionResult SaveAdd(EmpDepartmentList newdepartment)
+        public IActionResult SaveAdd(EmpDepartmentList newEmployee)
         {
-            if (!string.IsNullOrEmpty(newdepartment.Name))
+            if (ModelState.IsValid)
             {
-                var emp = new Employee();
-                emp.Name = newdepartment.Name;
-                emp.Salary = newdepartment.Salary;
-                emp.DepartmentId = newdepartment.DepartmentId;
-                emp.Address= newdepartment.Address;
-                emp.JobTitle= newdepartment.JobTitle;
-                emp.ImageURL= newdepartment.ImageURL;
-                context.Employees.Add(emp);
-                context.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            newdepartment.Departments = context.Departments.ToList(); ;
+                if (newEmployee.DepartmentId != 0)
+                {
 
-            return View("Add", newdepartment);
+                    var emp = new Employee();
+                    emp.Name = newEmployee.Name;
+                    emp.Salary = newEmployee.Salary;
+                    emp.DepartmentId = newEmployee.DepartmentId;
+                    emp.Address = newEmployee.Address;
+                    emp.JobTitle = newEmployee.JobTitle;
+                    emp.ImageURL = newEmployee.ImageURL;
+                    employeeRepo.Add(emp);//context.Employees.Add(emp);
+                    employeeRepo.Save();//context.SaveChanges();
+                    return RedirectToAction("Index");
+
+                }
+                else
+                {
+                    ModelState.AddModelError("DepartmentId", "select department");
+                }
+            }
+            newEmployee.Departments = departmentRepo.GetAll().DistinctBy(x => x.Name).ToList(); // context.Departments.ToList(); ;
+
+            return View("Add", newEmployee);
         }
         public IActionResult Delete(int id)
         {
-            var emp = context.Employees.FirstOrDefault(e => e.Id == id);
+            var emp = employeeRepo.GetById(id); //context.Employees.FirstOrDefault(e => e.Id == id);
             if (emp == null)
             {
                 return NotFound();
             }
 
-            context.Employees.Remove(emp);
-            context.SaveChanges();
+            employeeRepo.Delete(id); //context.Employees.Remove(emp);
+            employeeRepo.Save();//context.SaveChanges();
 
             return RedirectToAction("Index");
         }
@@ -149,7 +163,7 @@ namespace ABCD.Company.Controllers
         //}
         public IActionResult Search1(string keyword)
         {
-            var result = context.Employees
+            var result = employeeRepo.GetAll()
                 .Where(e => e.Name.Contains(keyword) || e.JobTitle.Contains(keyword))
                 .ToList();
 
@@ -157,6 +171,15 @@ namespace ABCD.Company.Controllers
 
             return View("DisplayAllEmployee", result);
         }
+        public IActionResult StartsWithA(string Name)
+        {
+            if (Name.StartsWith("a", StringComparison.OrdinalIgnoreCase))
+            {
+                return Json(true);
+            }
+            return Json(false);
+        }
+
 
 
 

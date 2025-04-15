@@ -12,6 +12,7 @@
     </div>
 
     <input type="submit" value="Submit" class="btn btn-danger" />
-    <a href="@Url.Action("Index", "Department")" class="btn btn-secondary">Back to List</a>
+    <a asp-action="index" asp-controller="Department" class="btn btn-secondary">Back to List</a>
+    @* href="@Url.Action("Index", "Department")" *@
 </form>
 
