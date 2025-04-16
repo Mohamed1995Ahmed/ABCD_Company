@@ -1,12 +1,14 @@
 ﻿using ABCD.Company.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ABCD.Company.Data
 {
-    public class AppDBcontext:DbContext
+    public class AppDBcontext:IdentityDbContext<AppUser>
     {
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Department> Departments { get; set; }
+        public DbSet<AppUser> User { get; set; }
         public AppDBcontext(DbContextOptions<AppDBcontext> options) : base(options)
         {
         }

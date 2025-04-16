@@ -28,6 +28,7 @@ namespace ABCD.Company.ViewModel
 
         [Display(Name = "Department")]
         public int DepartmentId { get; set; }
+       
 
         public List<Department>? Departments { get; set; }
     }

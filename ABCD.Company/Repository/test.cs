@@ -38,5 +38,10 @@ namespace ABCD.Company.Repository
         {
             throw new NotImplementedException();
         }
+
+        public void Delete1(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

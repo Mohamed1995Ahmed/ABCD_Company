@@ -7,5 +7,6 @@
         public string? ManagerName { get; set; }
 
         public virtual List<Employee>? Emps { get; set; }
+        
     }
 }

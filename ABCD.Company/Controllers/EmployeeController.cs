@@ -11,14 +11,19 @@ namespace ABCD.Company.Controllers
     {
         IEmployeeRepo employeeRepo;
         IDepartmentRepo departmentRepo;
+        
+        AppUser appUser=new AppUser();
+        
         public EmployeeController(IEmployeeRepo _employeeRepo,IDepartmentRepo _departmentRepo):base()
         {
             employeeRepo = _employeeRepo;
             departmentRepo = _departmentRepo;
+            
         }
        // AppDBcontext context=new AppDBcontext();
         public IActionResult Index()
         {
+            
             var employee = employeeRepo.GetAll(); //context.Employees.ToList();
             return View("DisplayAllEmployee", employee);
             
@@ -83,7 +88,7 @@ namespace ABCD.Company.Controllers
 
         public IActionResult saveEdit(EmpDepartmentList EditEmployee,int id)
         {
-            
+        
            if(EditEmployee.Name != null)
             {
                 var emp = employeeRepo.GetById(id); //context.Employees.FirstOrDefault(x => x.Id == id);
@@ -153,6 +158,7 @@ namespace ABCD.Company.Controllers
 
             return RedirectToAction("Index");
         }
+     
         //public IActionResult Search(string keyword)
         //{
         //    var result = context.Employees

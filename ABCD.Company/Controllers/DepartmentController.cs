@@ -1,12 +1,15 @@
 ﻿using ABCD.Company.Data;
+using ABCD.Company.Filter;
 using ABCD.Company.Models;
 using ABCD.Company.Repository;
 using ABCD.Company.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ABCD.Company.Controllers
 {
+    [Authorize]
     public class DepartmentController : Controller
     {
         //AppDBcontext context=new AppDBcontext();
@@ -83,8 +86,29 @@ namespace ABCD.Company.Controllers
                 return RedirectToAction("Index");
             }
         }
+        [HandelAnyException]
+        public IActionResult Delete1(int id)
+        {
+            var dept = departmentRepo.GetById(id);
+            if (dept == null)
+            {
+                return NotFound();
+            }
+
+            departmentRepo.Delete1(id); // Will throw if FK constraint is violated
+            departmentRepo.Save();
+
+            TempData["Success"] = "Department deleted successfully.";
+            return RedirectToAction("Index");
+        }
+
+
 
 
 
     }
+
+
+
 }
+
