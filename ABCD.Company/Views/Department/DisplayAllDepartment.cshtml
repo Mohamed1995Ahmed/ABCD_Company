@@ -28,6 +28,7 @@
             <th>Manager</th>
             <th>Delete</th>
             <th>Action</th>
+            <th>Details</th>
         </tr>
     </thead>
     <tbody>
@@ -40,6 +41,9 @@
                 <td>
                     <!-- Delete Button with Confirmation -->
                     <a href="javascript:void(0);" onclick="confirmDelete(@item.Id)" class="btn btn-danger">Delete</a>
+                </td>
+                <td>
+                    <a asp-action="delete1" asp-controller="department" asp-route-id="@item.Id">delete2</a>
                 </td>
                 <td>
                     <form method="get" asp-action="GetDepartmentById" asp-controller="department" asp-route-id="@item.Id">

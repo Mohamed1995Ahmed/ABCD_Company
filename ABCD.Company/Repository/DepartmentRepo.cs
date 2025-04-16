@@ -1,6 +1,8 @@
 ﻿using ABCD.Company.Data;
+using ABCD.Company.Filter;
 using ABCD.Company.Models;
 using ABCD.Company.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace ABCD.Company.Repository
 {
@@ -14,7 +16,9 @@ namespace ABCD.Company.Repository
         
         public void Add(Department department)
         {
+
             context.Add(department);
+            
 
         }
         public void Update(Department department) {
@@ -40,6 +44,13 @@ namespace ABCD.Company.Repository
             // Otherwise, remove the department
             context.Remove(dept);
         }
+        public void Delete1(int id)
+        {
+            Department dept = GetById(id);
+            context.Remove(dept);
+
+        }
+
 
         public List<Department> GetAll()
         {
@@ -51,9 +62,18 @@ namespace ABCD.Company.Repository
             return context.Departments.FirstOrDefault(x => x.Id == id);
 
         }
+
         public void Save()
         {
-            context.SaveChanges();
+            try
+            {
+                context.SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new SaveToDatabaseException("Failed to save changes to the database and continue to see informaion about it.", ex);
+            } 
         }
+
     }
 }
