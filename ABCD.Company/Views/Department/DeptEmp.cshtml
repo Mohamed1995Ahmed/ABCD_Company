@@ -1,0 +1,35 @@
+﻿@model List<string>
+
+@{
+    ViewData["Title"] = "Select Department";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow rounded-4 border-0">
+                <div class="card-header bg-primary text-white text-center rounded-top-4">
+                    <h4>Select a Department To Display Employees</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="TakeDeptAndReturnEmps" asp-controller="department" method="post">
+                        <div class="mb-3">
+                            <label for="departmentDropdown" class="form-label">Departments</label>
+                            <select class="form-select" id="departmentDropdown" name="department" required>
+                                <option selected disabled>-- Choose Department --</option>
+                                @foreach (var deptName in Model)
+                                {
+                                    <option value="@deptName">@deptName</option>
+                                }
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Submit</button>
+                    </form>
+                </div>
+                <div class="card-footer text-center bg-light">
+                    <a asp-action="Index" class="btn btn-outline-secondary">Back to Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

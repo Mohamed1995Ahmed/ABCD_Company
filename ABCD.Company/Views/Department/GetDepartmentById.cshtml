@@ -6,6 +6,8 @@
     <p><strong>ID:</strong> @Model.Id</p>
     <p><strong>Name:</strong> @Model.Name</p>
     <p><strong>ManagerName:</strong> @Model.ManagerName</p>
+    <a asp-action="delete" asp-controller="department" asp-route-id="@Model.Id" class="btn btn-info"
+    >Delete</a>
 </div>
 
 <a href="@Url.Action("index", "department")">Back to List</a>

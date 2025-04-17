@@ -3,7 +3,7 @@ using ABCD.Company.Services;
 
 namespace ABCD.Company.Repository
 {
-    public class test : IDepartmentRepo
+    public class test //: IDepartmentRepo
     {
         public void Add(Department entity)
         {

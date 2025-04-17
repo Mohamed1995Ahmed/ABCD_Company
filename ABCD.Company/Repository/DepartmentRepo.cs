@@ -2,6 +2,7 @@
 using ABCD.Company.Filter;
 using ABCD.Company.Models;
 using ABCD.Company.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ABCD.Company.Repository
@@ -65,15 +66,32 @@ namespace ABCD.Company.Repository
 
         public void Save()
         {
-            try
-            {
+           
                 context.SaveChanges();
-            }
-            catch (DbUpdateException ex)
-            {
-                throw new SaveToDatabaseException("Failed to save changes to the database and continue to see informaion about it.", ex);
-            } 
+            
+            
         }
+      //  [HttpGet]
+        public List<string> DisplayNamesOfDepartments()
+        {
+            var names = context.Departments
+                .Select(d => d.Name)
+                .Distinct()
+                .ToList();
+            //var deps = context.Departments.ToList();
+            //var names1 = deps.DistinctBy(x=>x.Name);
+
+            return names;
+        }
+       // [HttpPost]
+        public List<string> TakeDeptAndReturnEmps(string Dept)
+        {
+            var EmpsName = context.Employees.Where(x => x.Department.Name == Dept)
+                .Select(x => x.Name).ToList();
+            return EmpsName;
+        }
+       
+
 
     }
 }
