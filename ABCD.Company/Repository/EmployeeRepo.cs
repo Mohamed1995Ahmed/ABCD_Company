@@ -41,5 +41,9 @@ namespace ABCD.Company.Repository
         {
             context.SaveChanges();
         }
+        public List<Employee> GetByDEptID(int deptID)
+        {
+            return context.Employees.Where(e => e.DepartmentId == deptID).ToList();
+        }
     }
 }

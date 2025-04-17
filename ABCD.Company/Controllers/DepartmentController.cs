@@ -14,10 +14,12 @@ namespace ABCD.Company.Controllers
     {
         //AppDBcontext context=new AppDBcontext();
         IDepartmentRepo departmentRepo;
-        public DepartmentController(IDepartmentRepo _departmentRepo):base()
+        private readonly IEmployeeRepo employeeRepo;
+
+        public DepartmentController(IDepartmentRepo _departmentRepo,IEmployeeRepo employeeRepo):base()
         {
             departmentRepo = _departmentRepo;
-            
+            this.employeeRepo = employeeRepo;
         }
 
         public IActionResult Index()
@@ -95,12 +97,51 @@ namespace ABCD.Company.Controllers
                 return NotFound();
             }
 
-            departmentRepo.Delete1(id); // Will throw if FK constraint is violated
+            departmentRepo.Delete1(id); 
             departmentRepo.Save();
 
             TempData["Success"] = "Department deleted successfully.";
             return RedirectToAction("Index");
         }
+        [HttpGet]
+        public IActionResult DisplayNamesOfDepartments()
+        {
+            var depts = departmentRepo.DisplayNamesOfDepartments();
+            return View("DeptEmp", depts);
+        }
+
+        [HttpPost]
+        public IActionResult TakeDeptAndReturnEmps(string department)
+        {
+            var emps = departmentRepo.TakeDeptAndReturnEmps(department);
+            return View("DisplayEmp", emps);
+        }
+        public IActionResult DeptEmps()
+        {
+            var distinctDepts = departmentRepo.GetAll().DistinctBy(x=>x.Name)
+                .ToList();
+
+            return View("DisplayDeptWithEmp", distinctDepts);
+        }
+
+
+        //DEpartment/GetEmpsByDEptId?deptId=1
+        public IActionResult GetEmpsByDEptId(int deptId)
+        {
+            var emps = employeeRepo.GetByDEptID(deptId)
+        .Select(e => new
+        {
+            e.Id,
+            e.Name,
+            e.JobTitle,
+            e.Salary,
+            DepartmentName = e.Department.Name
+        }).ToList();
+
+            return Json(emps);
+        }
+
+
 
 
 

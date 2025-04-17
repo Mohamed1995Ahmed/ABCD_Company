@@ -185,6 +185,23 @@ namespace ABCD.Company.Controllers
             }
             return Json(false);
         }
+        public IActionResult Delete3(int id)
+        {
+            return View("Delete", employeeRepo.GetById(id));
+        }
+        [HttpPost]
+        public IActionResult ConfirmDelete(int id)
+        {
+            var employee = employeeRepo.GetById(id);
+            if (employee != null)
+            {
+                employeeRepo.Delete(id);
+                employeeRepo.Save();
+            }
+
+            return RedirectToAction("Index");
+        }
+
 
 
 

@@ -1,0 +1,12 @@
+﻿@model ABCD.Company.Models.Employee
+
+<div class="employee-card text-center">
+    <img src="~/@Model.ImageURL" alt="@Model.Name" class="img-thumbnail mb-3" style="max-height: 200px;" />
+    <p><strong>ID:</strong> @Model.Id</p>
+    <p><strong>Name:</strong> @Model.Name</p>
+    <p><strong>Job Title:</strong> @Model.JobTitle</p>
+    <p><strong>Salary:</strong> @Model.Salary</p>
+    <p><strong>Address:</strong> @Model.Address</p>
+    <p><strong>Department:</strong> @Model.Department?.Name</p>
+    <p><strong>Manager:</strong> @Model.Department?.ManagerName</p>
+</div>
