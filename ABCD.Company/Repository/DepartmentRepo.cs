@@ -71,7 +71,19 @@ namespace ABCD.Company.Repository
             
             
         }
-      //  [HttpGet]
+        public List<Department> GetPaged(int page, int pageSize)
+        {
+            return GetAll().Skip((page - 1) * pageSize)
+                          .Take(pageSize)
+                          .ToList();
+        }
+
+        public int Count()
+        {
+            return GetAll().Count();
+        }
+
+        //  [HttpGet]
         public List<string> DisplayNamesOfDepartments()
         {
             var names = context.Departments

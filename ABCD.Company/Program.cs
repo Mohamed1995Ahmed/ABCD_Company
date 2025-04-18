@@ -41,8 +41,8 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 //Naming convention Routing
-app.MapControllerRoute("route1", "AllEmps",
-    new { controller = "employee", Action = "Index" });
+app.MapControllerRoute("route1", "AllEmps/{action=Index}/{id:int}",
+    new { controller = "employee" });
 app.MapControllerRoute("route1", "AllDepts",
     new { controller = "department", Action = "Index" });
 //app.MapControllerRoute("route1", "we/{action=Index}",

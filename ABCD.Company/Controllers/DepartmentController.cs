@@ -3,6 +3,7 @@ using ABCD.Company.Filter;
 using ABCD.Company.Models;
 using ABCD.Company.Repository;
 using ABCD.Company.Services;
+using ABCD.Company.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,13 +23,21 @@ namespace ABCD.Company.Controllers
             this.employeeRepo = employeeRepo;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int page = 1, int pageSize = 5)
         {
-            
-            var department=departmentRepo.GetAll();
-        //departmentRepo.asd();
-            return View("DisplayAllDepartment", department);
+            var departments = departmentRepo.GetPaged(page, pageSize);
+            var totalCount = departmentRepo.Count();
+
+            var viewModel = new DepartmentPagedViewModel
+            {
+                Departments = departments,
+                CurrentPage = page,
+                TotalPages = (int)Math.Ceiling((double)totalCount / pageSize)
+            };
+
+            return View("DisplayAllDepartment", viewModel);
         }
+
         public IActionResult GetDepartmentById(int id)
         {
             var department = departmentRepo.GetById(id);

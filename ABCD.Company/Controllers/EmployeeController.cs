@@ -20,14 +20,31 @@ namespace ABCD.Company.Controllers
             departmentRepo = _departmentRepo;
             
         }
-       // AppDBcontext context=new AppDBcontext();
-        public IActionResult Index()
+        // AppDBcontext context=new AppDBcontext();
+        public IActionResult Index(int page = 1, int pageSize = 5, string keyword = "")
         {
-            
-            var employee = employeeRepo.GetAll(); //context.Employees.ToList();
-            return View("DisplayAllEmployee", employee);
-            
+            var employees = employeeRepo.GetPaged(page, pageSize, keyword);
+            var totalCount = employeeRepo.Count(keyword);
+
+            var viewModel = new EmployeePagedViewModel
+            {
+                Employees = employees,
+                CurrentPage = page,
+                TotalPages = (int)Math.Ceiling((double)totalCount / pageSize),
+                Keyword = keyword
+            };
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_EmployeeTablePartial", viewModel);
+            }
+
+            return View("DisplayAllEmployee", viewModel);
         }
+
+
+
+
         public IActionResult GetEmployeeById(int id)
         {
             var employee = employeeRepo.GetById(id); //context.Employees.FirstOrDefault(x => x.Id == id);
@@ -167,16 +184,16 @@ namespace ABCD.Company.Controllers
 
         //    return View("DisplayAllEmployee", result);
         //}
-        public IActionResult Search1(string keyword)
-        {
-            var result = employeeRepo.GetAll()
-                .Where(e => e.Name.Contains(keyword) || e.JobTitle.Contains(keyword))
-                .ToList();
+        //public IActionResult Search1(string keyword)
+        //{
+        //    var result = employeeRepo.GetAll()
+        //        .Where(e => e.Name.Contains(keyword) || e.JobTitle.Contains(keyword))
+        //        .ToList();
 
-            ViewBag.Keyword = keyword; // <-- pass it back
+        //    ViewBag.Keyword = keyword; // <-- pass it back
 
-            return View("DisplayAllEmployee", result);
-        }
+        //    return View("DisplayAllEmployee", result);
+        //}
         public IActionResult StartsWithA(string Name)
         {
             if (Name.StartsWith("a", StringComparison.OrdinalIgnoreCase))
@@ -201,6 +218,7 @@ namespace ABCD.Company.Controllers
 
             return RedirectToAction("Index");
         }
+
 
 
 
