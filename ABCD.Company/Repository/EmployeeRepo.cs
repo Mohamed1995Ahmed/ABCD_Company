@@ -41,6 +41,17 @@ namespace ABCD.Company.Repository
         {
             context.SaveChanges();
         }
+        public List<Employee> GetPaged(int page, int pageSize)
+        {
+            return GetAll().Skip((page - 1) * pageSize)
+                          .Take(pageSize)
+                          .ToList();
+        }
+
+        public int Count()
+        {
+            return GetAll().Count();
+        }
         public List<Employee> GetByDEptID(int deptID)
         {
             return context.Employees.Where(e => e.DepartmentId == deptID).ToList();

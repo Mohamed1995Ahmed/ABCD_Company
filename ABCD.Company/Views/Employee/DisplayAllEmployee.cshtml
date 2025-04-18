@@ -1,125 +1,194 @@
-﻿@model List<Employee>
-<form asp-action="Search1" asp-controller="Employee" method="get" class="mb-3">
-    <input type="text" name="keyword" value="@ViewBag.Keyword" placeholder="Search by name or job title" class="form-control" style="width: 300px; display: inline-block;" />
-    <button type="submit" class="btn btn-success">Search</button> 
-    
-</form>
+﻿@model EmployeePagedViewModel
 
-
-
-<h2 class="employee-title">Employee List</h2>
-<div>
-    <a asp-action="add" asp-controller="employee" class="btn-info btn ">Add</a>
+<div class="card shadow-sm mb-4 border-0">
+    <div class="card-body d-flex flex-wrap gap-3 align-items-center bg-light rounded-3">
+        <i class="bi bi-search fs-4 text-info me-2"></i>
+        <input type="text" id="searchInput" name="keyword" value="@Model.Keyword"
+               class="form-control form-control-lg flex-grow-1 border-0 border-bottom shadow-none"
+               placeholder="Search employees by name or job title..." />
+    </div>
 </div>
 
-<table class="employee-table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Job Title</th>
-            <th>Salary</th>
-            <th>Department</th>
-            <th>DId</th>
-            <th>Image</th>
-            <th>Details</th>
-            
-            <th>Update</th>
-            <th>Delete</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.Id</td>
-                <td>@item.Name</td>
-                <td>@item.JobTitle</td>
-                <td>@item.Salary</td>
-                <td>@item.Department?.Name</td>
-                <td>@item.DepartmentId</td>
 
-                <td>
-                    <img src="~/@item.ImageURL" alt="@item.Name" class="employee-img" />
-                </td>
-                <td>
-                    <form method="get" action="@Url.Action("GetEmployeeById", "Employee", new { id = item.Id })">
-                        <button type="submit" class="btn-details">Details</button>
-                    </form>
+    <!-- Employee Table -->
+    <div id="employeeTable">
+        <partial name="_EmployeeTablePartial" model="Model" />
+    </div>
+
+    <!-- Pagination Section -->
+    @if (Model.TotalPages > 1)
+    {
+        <div class="d-flex justify-content-center mt-4">
+            <nav aria-label="Page navigation">
+                @* <ul class="pagination"> *@
+
+
+                @*     <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")"> *@
+                @*         <a class="page-link" href="@Url.Action("Index", new { page = Model.CurrentPage - 1 })" tabindex="-1">« Previous</a> *@
+                @*     </li> *@
+
+                @*     <!-- Page Numbers --> *@
+                @*     @for (int i = 1; i <= Model.TotalPages; i++) *@
+                @*     { *@
+                @*         <li class="page-item @(i == Model.CurrentPage ? "active" : "")"> *@
+                @*             <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a> *@
+                @*         </li> *@
+                @*     } *@
+
+                @*     <!-- Next Button --> *@
+                @*     <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")"> *@
+                @*         <a class="page-link" href="@Url.Action("Index", new { page = Model.CurrentPage + 1 })">Next »</a> *@
+                @*     </li> *@
                   
+
                    
+                   
+                @* </ul> *@
+            </nav>
+        </div>
+    }
+</div>
 
-                </td>
-                
-
-                <td> <a href="/employee/edit/@item.Id" class="btn-details">Edit</a></td>
-                <td> <a href="/employee/delete/@item.Id" class="btn-details">Delete</a></td>
-
-            </tr>
-
-
+<!-- Scripts -->
+@section Scripts {
+    <script>
+        function loadContent(url) {
+            $.get(url, function (data) {
+                const html = $('<div>').html(data);
+                const newContent = html.find('#employeeTable').html();
+                $('#employeeTable').html(newContent);
+            });
         }
-    </tbody>
-</table>
+
+        $(document).ready(function () {
+            let debounceTimer;
+
+            // Live Debounced Search
+            $('#searchInput').on('keyup', function () {
+                clearTimeout(debounceTimer);
+                const keyword = $(this).val();
+                debounceTimer = setTimeout(() => {
+                    const url = '@Url.Action("Index", "Employee")' + '?keyword=' + encodeURIComponent(keyword);
+                    loadContent(url);
+                }, 300);
+            });
+
+            // AJAX Pagination
+            $(document).on('click', '.pagination a.page-link', function (e) {
+                e.preventDefault();
+                const url = $(this).attr('href');
+                loadContent(url);
+            });
+        });
+    </script>
+}
 
 <style>
-    .employee-title {
+    #searchInput::placeholder {
+        color: #6c757d;
+        font-style: italic;
+    }
+
+    .card {
+        border-radius: 1rem;
+    }
+
+    .table td, .table th {
+        vertical-align: middle;
         text-align: center;
-        margin-bottom: 30px;
-        font-size: 28px;
-        font-weight: bold;
-        color: #007acc;
     }
 
-    .employee-table {
-        width: 95%;
-        margin: 20px auto;
-        border-collapse: collapse;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-        background-color: #fff;
+    .table-hover tbody tr:hover {
+        background-color: #f1f1f1;
     }
 
-        .employee-table th, .employee-table td {
-            padding: 14px 20px;
-            border: 1px solid #ddd;
-            text-align: center;
-        }
-
-        .employee-table th {
-            background-color: #007acc;
-            color: white;
-            font-size: 16px;
-        }
-
-        .employee-table tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        .employee-table tr:hover {
-            background-color: #e0f2ff;
-        }
-
-    .btn-details {
-        background-color: #007acc;
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        cursor: pointer;
-        border-radius: 5px;
-        font-size: 14px;
-        transition: background-color 0.3s ease;
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        list-style: none;
+        padding-left: 0;
     }
 
-        .btn-details:hover {
-            background-color: #005fa3;
+        .pagination .page-link {
+            color: #0d6efd;
+            border-radius: 0.5rem;
         }
 
-    .employee-img {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        object-fit: cover;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        .pagination .page-item.active .page-link {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+            color: #fff;
+        }
+
+        .pagination .page-item.disabled .page-link {
+            color: #6c757d;
+        }
+
+    .page-item {
+        margin: 0 5px;
     }
+
+        .page-item a {
+            display: block;
+            padding: 10px 15px;
+        }
+
+    .bi {
+        font-size: 1.2rem;
+    }
+
+    .card {
+        border-radius: 1rem;
+        background-color: #f8f9fa; /* Soft background color for the card */
+    }
+
+    .card-body {
+        background-color: #ffffff; /* White background for card body */
+        border-radius: 1rem; /* Rounded corners for card body */
+        padding: 1.5rem; /* Padding for the card content */
+    }
+
+        .card-body .form-control {
+            font-size: 1.1rem; /* Slightly larger text for the search input */
+            border-radius: 0.5rem;
+        }
+
+            .card-body .form-control:focus {
+                border-color: #17a2b8; /* Blue border on focus */
+                box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.25); /* Soft shadow for focus effect */
+            }
+
+            .card-body .form-control::placeholder {
+                color: #6c757d; /* Placeholder text color */
+                font-style: italic; /* Italicize placeholder text */
+            }
+
+        .card-body i {
+            font-size: 1.5rem; /* Larger icon for better visibility */
+            color: #17a2b8; /* Light blue color for the search icon */
+        }
+
+        .card-body .form-control:focus + i {
+            color: #17a2b8; /* Change icon color when input is focused */
+        }
+
+    .bg-light {
+        background-color: #f1f5f8 !important; /* Light background for the whole card */
+    }
+
+    .card-body .form-control:focus {
+        border-color: #5e72e4;
+        box-shadow: 0 0 0 0.2rem rgba(94, 114, 228, 0.25); /* Blue glow on focus */
+    }
+
+    .card-body .form-control:hover {
+        border-color: #5e72e4; /* Light blue on hover */
+    }
+
+    .card-body .form-control::placeholder {
+        color: #adb5bd; /* Light grey placeholder */
+    }
+
 </style>
+
